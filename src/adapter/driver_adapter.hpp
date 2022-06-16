@@ -68,6 +68,7 @@ private:
   std::vector<std::function<void(const PacketMsg&)>> packet_cb_vec_;
   std::vector<std::function<void(const CameraTrigger&)>> camera_trigger_cb_vec_;
   lidar::ThreadPool::Ptr thread_pool_ptr_;
+  double last_cb_timestamp_ = 0.0;
 };
 
 inline DriverAdapter::DriverAdapter()
@@ -207,10 +208,24 @@ inline void DriverAdapter::decodePacket(const PacketMsg& msg)
 
 inline void DriverAdapter::localPointsCallback(const PointCloudMsg<PointT>& msg)
 {
+  auto start_time = getTime();
+#if 0
+  RS_INFO << std::fixed << "localPointsCallback start time: " << start_time << RS_REND;
+#endif
   for (auto iter : point_cloud_cb_vec_)
   {
     thread_pool_ptr_->commit([this, msg, iter]() { iter(core2SDK(msg)); });
   }
+  auto end_time = getTime();
+#if 0
+  RS_INFO << std::fixed << "localPointsCallback end time: " << end_time << RS_REND;
+  RS_INFO << std::fixed << "localPointsCallback interval: " << (end_time - start_time) << RS_REND;
+  if(last_cb_timestamp_ > 0.0)
+  {
+    RS_INFO << std::fixed << "localPointsCallback cb interval: " << (start_time - last_cb_timestamp_) << RS_REND;
+  }
+#endif
+  last_cb_timestamp_ = start_time;
 }
 
 inline void DriverAdapter::localScanCallback(const ScanMsg& msg)

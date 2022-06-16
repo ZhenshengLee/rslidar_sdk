@@ -94,6 +94,7 @@ public:
 private:
   std::shared_ptr<rclcpp::Node> node_ptr_;
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr point_cloud_pub_;
+  double last_pc_timestamp_ = 0.0;
 };
 
 inline void PointCloudRosAdapter::init(const YAML::Node& config)
@@ -106,12 +107,27 @@ inline void PointCloudRosAdapter::init(const YAML::Node& config)
   if (send_point_cloud_ros)
   {
     point_cloud_pub_ = node_ptr_->create_publisher<sensor_msgs::msg::PointCloud2>(ros_send_topic, 1);
+    // point_cloud_pub_ = node_ptr_->create_publisher<sensor_msgs::msg::PointCloud2>(ros_send_topic, rclcpp::SensorDataQoS());
   }
 }
 
 inline void PointCloudRosAdapter::sendPointCloud(const LidarPointCloudMsg& msg)
 {
+  auto start_time = getTime();
+#if 0
+  RS_INFO << std::fixed << "sendPointCloud start time: " << start_time << RS_REND;
+#endif
   point_cloud_pub_->publish(toRosMsg(msg));
+  auto end_time = getTime();
+#if 0
+  RS_INFO << std::fixed << "sendPointCloud end time: " << end_time << RS_REND;
+  RS_INFO << std::fixed << "sendPointCloud interval: " << (end_time - start_time) << RS_REND;
+  if(last_pc_timestamp_ > 0.0)
+  {
+    RS_INFO << std::fixed << "sendPointCloud cb interval: " << (start_time - last_pc_timestamp_) << RS_REND;
+  }
+#endif
+  last_pc_timestamp_ = start_time;
 }
 
 }  // namespace lidar

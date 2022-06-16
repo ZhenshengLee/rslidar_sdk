@@ -49,6 +49,19 @@ static void sigHandler(int sig)
   g_cv.notify_all();
 }
 
+int set_thread_priority(pid_t pid, size_t sched_priority, int policy)
+{
+  struct sched_param param;
+  memset(&param, 0, sizeof(param));
+  param.sched_priority = sched_priority;
+  return sched_setscheduler(pid, policy, &param);
+}
+
+int set_this_thread_priority(size_t sched_priority, int policy)
+{
+  return set_thread_priority(getpid(), sched_priority, policy);
+}
+
 int main(int argc, char** argv)
 {
   signal(SIGINT, sigHandler);  ///< bind ctrl+c signal with the sigHandler function
@@ -94,6 +107,11 @@ int main(int argc, char** argv)
     RS_ERROR << "Config file format wrong! Please check the format(e.g. indentation) " << RS_REND;
     return -1;
   }
+
+  // 配置context 和 数据采集线程的优先级
+#if 0
+  set_this_thread_priority(98, SCHED_FIFO);
+#endif
 
   std::shared_ptr<AdapterManager> demo_ptr = std::make_shared<AdapterManager>();
   demo_ptr->init(config);
