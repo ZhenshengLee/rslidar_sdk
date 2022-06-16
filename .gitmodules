@@ -1,4 +1,4 @@
 [submodule "src/rs_driver"]
 	path = src/rs_driver
-	url = https://ghproxy.com/https://github.com/RoboSense-LiDAR/rs_driver.git
-	branch = dev_opt
+	url = https://ghproxy.com/https://github.com/ros2driver/rs_driver.git
+	branch = outdoor/dev_opt
