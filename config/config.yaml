@@ -15,7 +15,7 @@ lidar:
       wait_for_difop: true
       min_distance: 0.2            #Minimum distance of point cloud
       max_distance: 200            #Maximum distance of point cloud
-      use_lidar_clock: true       #True--Use the lidar clock as the message timestamp
+      use_lidar_clock: false       #True--Use the lidar clock as the message timestamp
                                   #False-- Use the system clock as the timestamp
       dense_points: true
       pcap_path: /home/eidv/rs_replay/pcap/r16_3_0823.pcap  #The path of pcap file
