@@ -8,14 +8,14 @@ project(rslidar_sdk)
 #=======================================
 # Compile setup (ORIGINAL, CATKIN, COLCON)
 #=======================================
-set(COMPILE_METHOD CATKIN)
+set(COMPILE_METHOD COLCON)
 
 #=======================================
 # Custom Point Type (XYZI, XYZIRT)
 #=======================================
 set(POINT_TYPE XYZI)
 
-option(ENABLE_PCAP_PARSE "Enable PCAP file parse" ON) 
+option(ENABLE_PCAP_PARSE "Enable PCAP file parse" ON)
 if(${ENABLE_PCAP_PARSE})
   add_definitions("-DENABLE_PCAP_PARSE")
 endif(${ENABLE_PCAP_PARSE})
@@ -88,7 +88,7 @@ if(rclcpp_FOUND AND ${COMPILE_METHOD} STREQUAL "COLCON")
   find_package(ament_cmake REQUIRED)
   find_package(sensor_msgs REQUIRED)
   find_package(rslidar_msg REQUIRED)
-  find_package(std_msgs REQUIRED)                      
+  find_package(std_msgs REQUIRED)
 
 else(rclcpp_FOUND AND ${COMPILE_METHOD} STREQUAL "COLCON")
   message(=============================================================)
@@ -142,8 +142,8 @@ if(${COMPILE_METHOD} STREQUAL "CATKIN")
           sensor_msgs
           roslib)
 
-  catkin_package(CATKIN_DEPENDS 
-    sensor_msgs 
+  catkin_package(CATKIN_DEPENDS
+    sensor_msgs
     roslib)
 
 endif(${COMPILE_METHOD} STREQUAL "CATKIN")
@@ -183,7 +183,7 @@ if(NOT PROTOC MATCHES "NOTFOUND" AND Protobuf_FOUND)
               ${PROTO_FILE_PATH}/scan.pb.cc
               ${PROTO_FILE_PATH}/point_cloud.pb.cc
               )
-  target_link_libraries(rslidar_sdk_node                   
+  target_link_libraries(rslidar_sdk_node
                       ${YAML_CPP_LIBRARIES}
                       ${PROTOBUF_LIBRARY}
                       ${rs_driver_LIBRARIES}
@@ -194,7 +194,7 @@ else(NOT PROTOC MATCHES "NOTFOUND" AND Protobuf_FOUND)
   add_executable(rslidar_sdk_node
               node/rslidar_sdk_node.cpp
               src/manager/node_manager.cpp)
-  target_link_libraries(rslidar_sdk_node                   
+  target_link_libraries(rslidar_sdk_node
                       ${YAML_CPP_LIBRARIES}
                       ${rs_driver_LIBRARIES})
 
@@ -226,10 +226,10 @@ endif(roscpp_FOUND)
 #Ros2#
 if(rclcpp_FOUND AND ${COMPILE_METHOD} STREQUAL "COLCON")
 
-  ament_target_dependencies(rslidar_sdk_node 
-    rclcpp 
-    sensor_msgs 
-    std_msgs 
+  ament_target_dependencies(rslidar_sdk_node
+    rclcpp
+    sensor_msgs
+    std_msgs
     rslidar_msg)
 
   install(TARGETS

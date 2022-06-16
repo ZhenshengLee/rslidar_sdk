@@ -7,17 +7,18 @@ common:
   send_point_cloud_ros: true                            #true: Send point cloud through ROS or ROS2
 lidar:
   - driver:
-      lidar_type: RSM1             #LiDAR type - RS16, RS32, RSBP, RSHELIOS, RSHELIOS_16P, RS128, RS80, RSP128, RSP80, RSP48, RSM1, RSM2, RSEOS, RSM1_JUMBO
+      lidar_type: RSHELIOS_16P             #LiDAR type - RS16, RS32, RSBP, RSHELIOS, RSHELIOS_16P, RS128, RS80, RSP128, RSP80, RSP48, RSM1, RSM2, RSEOS, RSM1_JUMBO
       msop_port: 6699              #Msop port of lidar
       difop_port: 7788             #Difop port of lidar
       start_angle: 0               #Start angle of point cloud
-      end_angle: 360               #End angle of point cloud 
+      end_angle: 360               #End angle of point cloud
       wait_for_difop: true
       min_distance: 0.2            #Minimum distance of point cloud
       max_distance: 200            #Maximum distance of point cloud
-      use_lidar_clock: false       #True--Use the lidar clock as the message timestamp
-                                   #False-- Use the system clock as the timestamp
-      pcap_path: /home/robosense/lidar.pcap #The path of pcap file
+      use_lidar_clock: true       #True--Use the lidar clock as the message timestamp
+                                  #False-- Use the system clock as the timestamp
+      dense_points: true
+      pcap_path: /home/eidv/rs_replay/pcap/r16_3_0823.pcap  #The path of pcap file
     ros:
       ros_frame_id: rslidar                           #Frame id of packet message and point cloud message
       ros_recv_packet_topic: /rslidar_packets          #Topic used to receive lidar packets from ROS
