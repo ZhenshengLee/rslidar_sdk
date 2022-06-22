@@ -33,9 +33,12 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "manager/node_manager.hpp"
 #include "source/source_driver.hpp"
 #include "source/source_pointcloud_ros.hpp"
+#include "source/source_pointcloud_ros_shm.hpp"
 #include "source/source_packet_ros.hpp"
 #include "source/source_packet_proto.hpp"
 #include "source/source_pointcloud_proto.hpp"
+
+extern std::string topic_suffix;
 
 namespace robosense
 {
@@ -54,6 +57,9 @@ void NodeManager::init(const YAML::Node& config)
 
   bool send_point_cloud_ros;
   yamlRead<bool>(common_config, "send_point_cloud_ros", send_point_cloud_ros, false);
+
+  bool send_point_cloud_ros_shm;
+  yamlRead<bool>(common_config, "send_point_cloud_ros_shm", send_point_cloud_ros_shm, false);
 
   bool send_point_cloud_proto;
   yamlRead<bool>(common_config, "send_point_cloud_proto", send_point_cloud_proto, false);
@@ -155,6 +161,19 @@ void NodeManager::init(const YAML::Node& config)
       RS_DEBUG << "------------------------------------------------------" << RS_REND;
 
       std::shared_ptr<DestinationPointCloud> dst = std::make_shared<DestinationPointCloudRos>();
+      dst->init(lidar_config[i]);
+      source->regPointCloudCallback(dst);
+    }
+
+    if (send_point_cloud_ros_shm)
+    {
+      RS_DEBUG << "------------------------------------------------------" << RS_REND;
+      RS_DEBUG << "Send PointCloud To : ROS2 Shm " << RS_REND;
+      RS_DEBUG << "PointCloud Topic: " << lidar_config[i]["ros"]["ros_send_point_cloud_topic"].as<std::string>() << topic_suffix
+               << RS_REND;
+      RS_DEBUG << "------------------------------------------------------" << RS_REND;
+
+      std::shared_ptr<DestinationPointCloud> dst = std::make_shared<DestinationPointCloudRosShm>();
       dst->init(lidar_config[i]);
       source->regPointCloudCallback(dst);
     }

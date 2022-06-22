@@ -4,7 +4,8 @@ common:
                                                         #2: packet message comes from ROS or ROS2
                                                         #3: packet message comes from Pcap file
   send_packet_ros: false                                #true: Send packets through ROS or ROS2(Used to record packet)
-  send_point_cloud_ros: true                            #true: Send point cloud through ROS or ROS2
+  send_point_cloud_ros: false                            #true: Send point cloud through ROS or ROS2
+  send_point_cloud_ros_shm: true                            #true: Send point cloud through ROS2 zero-copy transport
 lidar:
   - driver:
       lidar_type: RSHELIOS_16P             #LiDAR type - RS16, RS32, RSBP, RSHELIOS, RSHELIOS_16P, RS128, RS80, RSP128, RSP80, RSP48, RSM1, RSM2, RSEOS, RSM1_JUMBO

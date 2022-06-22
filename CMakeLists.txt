@@ -89,6 +89,8 @@ if(rclcpp_FOUND AND ${COMPILE_METHOD} STREQUAL "COLCON")
   find_package(sensor_msgs REQUIRED)
   find_package(rslidar_msg REQUIRED)
   find_package(std_msgs REQUIRED)
+  find_package(shm_msgs REQUIRED)
+  find_package(Boost QUIET)
 
 else(rclcpp_FOUND AND ${COMPILE_METHOD} STREQUAL "COLCON")
   message(=============================================================)
@@ -230,6 +232,7 @@ if(rclcpp_FOUND AND ${COMPILE_METHOD} STREQUAL "COLCON")
     rclcpp
     sensor_msgs
     std_msgs
+    shm_msgs
     rslidar_msg)
 
   install(TARGETS
